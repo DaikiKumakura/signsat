@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "signsat"
+version = "0.1.0.dev0"
+description = "SAT-based signed causal network reconstruction from TF activity and a signed prior-knowledge network"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Daiki Kumakura"}]
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "pandas>=2.0",
+  "scipy>=1.10",
+  "python-sat>=1.8",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,3 @@
+pkn,input_rows,unusable_rows,edges,nodes,root_nodes,reachable_from_roots,largest_SCC,SCCs_gt1,CollecTRI_TFs,TFs_in_PKN,TFs_reachable
+omnipath,73690,13917,73197,7154,1914,7154,2211,21,1057,639,639
+signor,7877,5314,6864,3965,1225,3965,625,10,1057,562,562
