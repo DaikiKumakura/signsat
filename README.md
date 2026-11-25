@@ -65,6 +65,10 @@ even for 2 TFs on SIGNOR**, queries often hit a 60 s limit, and random TF signs 
 all-TF consistency discriminates little. Biological validity (real TF activities, drug perturbation data) is not
 tested. Visualisation and caching beyond identical TF patterns are not implemented.
 
+## Citation
+
+Kumakura, D. *signsat* [Software]. [GitHub repository](https://github.com/DaikiKumakura/signsat).
+
 ## License
 
 This project is licensed under MIT. See [LICENSE](LICENSE) for the license terms.
