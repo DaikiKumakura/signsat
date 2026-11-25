@@ -1,12 +1,24 @@
 # SignSAT
 
 SAT-based reconstruction of sample-specific signed causal networks from TF activity and a signed prior-knowledge
-network (PKN). Status: **0.1.0.dev0, early development** (not released, not on PyPI). MIT licence.
+network (PKN). Status: **0.1.0.dev0, early development** (not released, not on PyPI).
 
 For every sample the package returns the set of causal networks in which one simple path from an upstream root to
 each observed TF exists, all paths are sign-consistent with each other, and each observed TF has the observed
 state. Edges are classified as Necessary / Alternative (possible, not necessary); nothing is pruned by top-k, path
 length, regularisation or score thresholds. Details and definitions: [SPEC.md](SPEC.md).
+
+<a id="install-for-development"></a>
+
+## Installation
+
+```
+python -m venv .venv
+.venv/Scripts/python -m pip install -e . pytest       # Windows; python-sat, numpy, pandas, scipy are dependencies
+.venv/Scripts/python -m pytest -q                      # 291 tests, about 40 s
+```
+
+## Quick start
 
 ```python
 import pandas as pd
@@ -34,19 +46,17 @@ Inputs: a samples x TFs table (`tf_scores`: sign only; `tf_states`: 1 / 0 / NA) 
 `target`, `sign` (+ optional evidence columns). Statuses per sample: SAT, UNSAT (with the minimal conflicting
 observations), UNREACHABLE, NO_OBSERVATIONS, INCOMPLETE.
 
-## Install for development
+## Documentation
 
-```
-python -m venv .venv
-.venv/Scripts/python -m pip install -e . pytest       # Windows; python-sat, numpy, pandas, scipy are dependencies
-.venv/Scripts/python -m pytest -q                      # 291 tests, about 40 s
-```
+[Specification](SPEC.md) · [Data sources](docs/data.md) · [Benchmarks](docs/benchmarks.md)
 
 Real resources: `signsat.sources.omnipath_pkn`, `signor_pkn`, `collectri_tfs` read OmniPath / SIGNOR / CollecTRI dumps
 (download commands in `docs/data.md`). `infer(solver="auto")` is the default; `time_limit=` stops the search and
 returns what is proven (`INCOMPLETE`, `Possible (partial)`, `Subnetwork.complete=False`).
 
-## What is and is not established
+<a id="what-is-and-is-not-established"></a>
+
+## Validation and limitations
 
 Correctness on small graphs is checked against an independent brute-force enumeration (SPEC.md section 5).
 Measured on real PKNs with simulated TF states (`docs/benchmarks.md`): the satisfiability check works at SIGNOR
