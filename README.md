@@ -54,3 +54,7 @@ Measured on real PKNs with simulated TF states (`docs/benchmarks.md`): the satis
 even for 2 TFs on SIGNOR**, queries often hit a 60 s limit, and random TF signs are almost always satisfiable, so
 all-TF consistency discriminates little. Biological validity (real TF activities, drug perturbation data) is not
 tested. Visualisation and caching beyond identical TF patterns are not implemented.
+
+## License
+
+This project is licensed under MIT. See [LICENSE](LICENSE) for the license terms.
