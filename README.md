@@ -3,13 +3,6 @@
 SAT-based reconstruction of sample-specific signed causal networks from TF activity and a signed prior-knowledge
 network (PKN). Status: **0.1.0.dev0, early development** (not released, not on PyPI).
 
-For every sample the package returns the set of causal networks in which one simple path from an upstream root to
-each observed TF exists, all paths are sign-consistent with each other, and each observed TF has the observed
-state. Edges are classified as Necessary / Alternative (possible, not necessary); nothing is pruned by top-k, path
-length, regularisation or score thresholds. Details and definitions: [SPEC.md](SPEC.md).
-
-<a id="install-for-development"></a>
-
 ## Installation
 
 ```
@@ -42,28 +35,16 @@ sub.edges, sub.empty_reason, sub.witness
 res.save("out/"); ss.Result.load("out/")
 ```
 
-Inputs: a samples x TFs table (`tf_scores`: sign only; `tf_states`: 1 / 0 / NA) and a PKN with columns `source`,
-`target`, `sign` (+ optional evidence columns). Statuses per sample: SAT, UNSAT (with the minimal conflicting
-observations), UNREACHABLE, NO_OBSERVATIONS, INCOMPLETE.
-
 ## Documentation
 
-[Specification](SPEC.md) · [Data sources](docs/data.md) · [Benchmarks](docs/benchmarks.md)
-
-Real resources: `signsat.sources.omnipath_pkn`, `signor_pkn`, `collectri_tfs` read OmniPath / SIGNOR / CollecTRI dumps
-(download commands in `docs/data.md`). `infer(solver="auto")` is the default; `time_limit=` stops the search and
-returns what is proven (`INCOMPLETE`, `Possible (partial)`, `Subnetwork.complete=False`).
-
-<a id="what-is-and-is-not-established"></a>
+[Usage guide](https://github.com/DaikiKumakura/signsat/blob/main/README-GUIDE.md)
 
 ## Validation and limitations
 
-Correctness on small graphs is checked against an independent brute-force enumeration (SPEC.md section 5).
-Measured on real PKNs with simulated TF states (`docs/benchmarks.md`): the satisfiability check works at SIGNOR
-(6.9k edges) and OmniPath (73k edges) scale, but **exhaustive Possible/Necessary classification does not finish in 60 s
-even for 2 TFs on SIGNOR**, queries often hit a 60 s limit, and random TF signs are almost always satisfiable, so
-all-TF consistency discriminates little. Biological validity (real TF activities, drug perturbation data) is not
-tested. Visualisation and caching beyond identical TF patterns are not implemented.
+- **Validation:** Compared small graphs with brute-force enumeration and benchmarked public signed networks with simulated TF states.
+- **Results:** Satisfiability checks ran on SIGNOR and OmniPath at the tested scales.
+- **Limitations:** Exhaustive classifications and some queries timed out. These experiments do not validate biological predictions.
+- **Reproduction:** [docs/benchmarks.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/benchmarks.md).
 
 ## Citation
 
