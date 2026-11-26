@@ -35,6 +35,34 @@ sub.edges, sub.empty_reason, sub.witness
 res.save("out/"); ss.Result.load("out/")
 ```
 
+For sample `S1` the printed tables are (`net.edges`, then `res.tf_explanations` for all samples):
+
+```text
+  sample edge_id source target  sign       status
+0     S1      e1      R      A     1    Necessary
+1     S1      e2      R      B     1  Alternative
+2     S1      e3      R      C     1  Alternative
+3     S1      e4      A    TF1     1    Necessary
+4     S1      e6      B    TF2     1  Alternative
+5     S1      e7      C    TF2     1  Alternative
+
+  sample   tf  observed_state  explained     explanation_status
+0     S1  TF1               1       True                 Unique
+1     S1  TF2               1       True  Multiple alternatives
+2     S2  TF1               1       True                 Unique
+3     S2  TF2              -1       True                 Unique
+4     S3  TF1              -1       True                 Unique
+```
+
+Reading it: in `S1` both TFs are active, so the edge `R -> A -> TF1` is Necessary (the only way to explain TF1),
+while TF2 can be reached through `B` or through `C` (Alternative). The edge `A -> TF2` (sign -1) is not in the
+network, because it would make TF2 inactive. `S3` has no observation for TF2, so only TF1 is explained.
+`res.diagnostics` is empty here: no unmapped TFs and no conflicts.
+
+Inputs: a samples x TFs table (`tf_scores`: sign only; `tf_states`: 1 / 0 / NA) and a PKN with columns `source`,
+`target`, `sign` (+ optional evidence columns). Statuses per sample: SAT, UNSAT (with the minimal conflicting
+observations), UNREACHABLE, NO_OBSERVATIONS, INCOMPLETE.
+
 ## Documentation
 
 [Usage guide](https://github.com/DaikiKumakura/signsat/blob/main/README-GUIDE.md)
