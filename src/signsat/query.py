@@ -73,7 +73,7 @@ def _empty(net, target, focus, reason, missing=None, note=None) -> Subnetwork:
 
 
 def subnetwork(net: SampleNetwork, target: dict | None = None, focus: list | None = None,
-               time_limit: float | None = None) -> Subnetwork:
+               time_limit: float | None = None, edges: bool = True) -> Subnetwork:
     G = net.graph
     target = {normalize_gene(k): int(v) for k, v in (target or {}).items()}
     focus = [normalize_gene(g) for g in (focus or [])]
@@ -102,7 +102,7 @@ def subnetwork(net: SampleNetwork, target: dict | None = None, focus: list | Non
     if (target and not T) or (focus and not F):
         return _empty(net, target, focus, "GENE_NOT_IN_PKN", missing)
     net.get_model().set_time_limit(time_limit)
-    out = _run(net, T, F, apply_states=True)
+    out = _run(net, T, F, apply_states=True, edges=edges)
     incomplete = net.get_model().incomplete
     net.get_model().set_time_limit(None)
     if incomplete and not out["edges"] and not out["explained"]:
@@ -138,14 +138,14 @@ def _pkn_edges(net: SampleNetwork) -> pd.DataFrame:
     return pk
 
 
-def _run(net: SampleNetwork, T: dict[int, int], F: set[int], apply_states: bool) -> dict:
+def _run(net: SampleNetwork, T: dict[int, int], F: set[int], apply_states: bool, edges: bool = True) -> dict:
     model = net.get_model()
     G = net.graph
     for t in T:
         model.zvar(t)
     for f in model.obs:
         model.zvar(f)
-    s = model.fresh_solver()
+    s = model.fresh_solver("cadical153")  # clearly the strongest on the real-PKN query formulas (time limit is soft)
     newv = model.new_var  # shared id counter; the definitional clauses below go to the private solver ``s`` only
 
     def add(cl):
@@ -273,6 +273,8 @@ def _run(net: SampleNetwork, T: dict[int, int], F: set[int], apply_states: bool)
                     if sat([Q[f], key]):
                         matched_f.add(gnode)
     base = obs + tl
+    if not edges:  # only which observed TFs can be explained (cheap); no edge / node enumeration
+        return {"edges": [], "witness": {}, "nodes": {}, "explained": explained, "matched_t": matched_t, "matched_f": matched_f}
     cover(model, base, dict(edge_var), record, solver=s)  # every edge that can be in the answer (final UNSAT proves the rest cannot)
     wnode = {}
     for n, nv_ in node_var.items():

@@ -1,0 +1,3 @@
+k,real,shuffled_SAT,shuffled_UNSAT,shuffled_other,shuffled_n,seconds,p1_MEK-1_explains,p1_MEK+1_explains,p2_MEK-1_explains,p2_MEK+1_explains,p3_MEK-1_explains,p3_MEK+1_explains,p4_MEK-1_explains,p4_MEK+1_explains
+5,"{'p1': 'SAT', 'p2': 'SAT', 'p3': 'SAT', 'p4': 'SAT'}",80,0,0,80,3,5/5,3/5 (incomplete),5/5,3/5 (incomplete),5/5,5/5,5/5,5/5
+10,"{'p1': 'SAT', 'p2': 'SAT', 'p3': 'SAT', 'p4': 'SAT'}",80,0,0,80,5,5/10 (incomplete),4/10 (incomplete),3/10 (incomplete),2/10 (incomplete),2/10 (incomplete),4/10 (incomplete),2/10 (incomplete),3/10 (incomplete)

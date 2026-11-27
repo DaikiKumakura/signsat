@@ -210,9 +210,10 @@ class Result:
         }
 
     # ----------------------------------------------------------------- query
-    def subnetwork(self, sample, target: dict | None = None, focus: list | None = None, time_limit: float | None = None):
+    def subnetwork(self, sample, target: dict | None = None, focus: list | None = None, time_limit: float | None = None,
+                   edges: bool = True):
         from .query import subnetwork
-        return subnetwork(self.network(sample), target=target, focus=focus, time_limit=time_limit)
+        return subnetwork(self.network(sample), target=target, focus=focus, time_limit=time_limit, edges=edges)
 
     def save(self, directory) -> None:
         from .io import save_result

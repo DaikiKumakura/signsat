@@ -119,5 +119,7 @@ author.
 * **Discrimination.** With random TF signs on SIGNOR 56 of 60 samples (k = 4, 8, 16) were jointly satisfiable, so
   "all TFs consistent" is a weak test at this PKN density; the structural root set (1,225 nodes in SIGNOR, 1,914 in
   OmniPath) is a very permissive definition of an upstream origin.
-* Biological validity (real TF activities, drug perturbation data) is untested.
+* Biological validity: one real perturbation dataset was tried (`docs/validation.md`): real and sign-shuffled TF states
+  gave identical SAT/UNSAT results (SAT up to 20 TFs, UNSAT from 30) and both target directions explained the TFs, so
+  no evidence of recovery beyond chance. Queries use cadical153 (soft time limit).
 * Complexes are not supported (SIGNOR complexes/families and OmniPath complex nodes are excluded by the readers).

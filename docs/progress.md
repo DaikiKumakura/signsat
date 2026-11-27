@@ -65,3 +65,11 @@ all-TF consistency condition discriminates little; structural roots are very num
    parallel solvers (process-level racing), or reporting classification only for queried regions.
 3. Re-benchmark queries on the full grid after the structural pruning.
 4. Repository: local git only; no remote created.
+
+## 2026-11-22/27 - public repository and first real perturbation dataset
+* Public repository created and pushed: https://github.com/DaikiKumakura/signsat (author's go-ahead: "やれ").
+* `subnetwork(..., edges=False)` (explained TFs only); queries now use cadical153 (maplechrono needed >89 s on a
+  query that cadical answered in 16 s).
+* Validation on GSE329052 (MEK inhibitor, 4 patients): `docs/validation.md`. Result: pipeline works; no discrimination
+  between real and sign-shuffled TF states, and the wrong target direction is also explained. Open: a better null,
+  other TF-activity methods, a kinase-level PKN restriction, more datasets.

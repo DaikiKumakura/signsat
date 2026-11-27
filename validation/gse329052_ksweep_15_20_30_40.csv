@@ -1,0 +1,5 @@
+k,real,shuffled_SAT,shuffled_UNSAT,shuffled_other,shuffled_n,seconds,p1_conflict,p2_conflict,p3_conflict,p4_conflict
+15,"{'p1': 'SAT', 'p2': 'SAT', 'p3': 'SAT', 'p4': 'SAT'}",80,0,0,80,7,,,,
+20,"{'p1': 'SAT', 'p2': 'SAT', 'p3': 'SAT', 'p4': 'SAT'}",80,0,0,80,9,,,,
+30,"{'p1': 'UNSAT', 'p2': 'UNSAT', 'p3': 'UNSAT', 'p4': 'UNSAT'}",0,80,0,80,15,"MLXIPL-1,NRF1-1","MLXIPL-1,NRF1-1","MLXIPL-1,NRF1-1","MLXIPL-1,NRF1-1"
+40,"{'p1': 'UNSAT', 'p2': 'UNSAT', 'p3': 'UNSAT', 'p4': 'UNSAT'}",0,80,0,80,25,"MLXIPL-1,NRF1-1","MLXIPL-1,NRF1-1","MLXIPL-1,NRF1-1","MLXIPL-1,NRF1-1"

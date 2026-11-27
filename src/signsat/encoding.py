@@ -273,8 +273,10 @@ class SampleModel:
             self._solver = self.fresh_solver()
         return self._solver
 
-    def fresh_solver(self):
-        s = Solver(name=self.solver_name, bootstrap_with=self.clauses)
+    def fresh_solver(self, name: str | None = None):
+        name = name or self.solver_name
+        s = Solver(name=name, bootstrap_with=self.clauses)
+        s.signsat_name = name
         try:  # prefer 'edge not used': keeps spurious cycles rare (the result does not depend on this)
             s.set_phases([-v for v in self.p.values()] + [-v for v in self.x.values()])
         except (NotImplementedError, AttributeError):
@@ -288,8 +290,9 @@ class SampleModel:
     def solve(self, assumptions: list[int], solver=None) -> bool | None:
         """SAT with lazy removal of disjoint cycles. True / False / None (budget exhausted)."""
         s = solver or self.solver
+        sname = getattr(s, "signsat_name", self.solver_name)
         while True:
-            if self.deadline is not None and self.solver_name.startswith("cadical"):
+            if self.deadline is not None and sname.startswith("cadical"):
                 # CaDiCaL in PySAT cannot be interrupted: the time limit is checked between calls only (soft limit)
                 if self.deadline - time.monotonic() <= 0:
                     self.incomplete = True
@@ -307,7 +310,7 @@ class SampleModel:
                 finally:
                     timer.cancel()
                     s.clear_interrupt()
-            elif self.conflict_budget is not None and not self.solver_name.startswith("cadical"):
+            elif self.conflict_budget is not None and not sname.startswith("cadical"):
                 s.conf_budget(self.conflict_budget)
                 r = s.solve_limited(assumptions=assumptions)
             else:
