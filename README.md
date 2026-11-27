@@ -72,6 +72,7 @@ observations), UNREACHABLE, NO_OBSERVATIONS, INCOMPLETE.
 - **Validation:** Compared small graphs with brute-force enumeration and benchmarked public signed networks with simulated TF states.
 - **Results:** Satisfiability checks ran on SIGNOR and OmniPath at the tested scales.
 - **Limitations:** Exhaustive classifications and some queries timed out. These experiments do not validate biological predictions.
+- **Real perturbation data:** On one MEK-inhibitor dataset, real and sign-shuffled TF states gave identical SAT/UNSAT results and both target directions were explained, so recovery of true routes beyond chance is not shown ([docs/validation.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/validation.md)).
 - **Reproduction:** [docs/benchmarks.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/benchmarks.md).
 
 ## Citation
