@@ -12,7 +12,7 @@ import itertools
 from signsat.graph import Graph
 
 
-def simple_paths(G: Graph, roots: set[int], f: int):
+def simple_paths(G: Graph, roots: set[int], f: int, max_len: int | None = None):
     """All simple edge-paths from a root node to f (list of edge-index tuples; () if f is a root)."""
     out = []
     if f in roots:
@@ -21,6 +21,8 @@ def simple_paths(G: Graph, roots: set[int], f: int):
     def dfs(v, visited, edges):
         if v == f and edges:
             out.append(tuple(edges))
+            return
+        if max_len is not None and len(edges) >= max_len:
             return
         for k in G.out_edges[v]:
             w = int(G.dst[k])
@@ -37,9 +39,9 @@ def simple_paths(G: Graph, roots: set[int], f: int):
     return out
 
 
-def explanations(G: Graph, roots: set[int], obs: dict[int, int], targets: dict[int, int] | None = None):
+def explanations(G: Graph, roots: set[int], obs: dict[int, int], targets: dict[int, int] | None = None, max_len: int | None = None):
     """Yield (paths_per_tf, edge_set, z_assignments) for consistent combinations."""
-    per_tf = {f: simple_paths(G, roots, f) for f in obs}
+    per_tf = {f: simple_paths(G, roots, f, max_len) for f in obs}
     if any(len(v) == 0 for v in per_tf.values()):
         return []
     res = []
@@ -59,8 +61,8 @@ def explanations(G: Graph, roots: set[int], obs: dict[int, int], targets: dict[i
     return res
 
 
-def classify(G, roots, obs):
-    ex = explanations(G, roots, obs)
+def classify(G, roots, obs, max_len=None):
+    ex = explanations(G, roots, obs, None, max_len)
     if not ex:
         return None
     sets = [e for _, e, _ in ex]

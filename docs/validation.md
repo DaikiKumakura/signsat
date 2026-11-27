@@ -39,3 +39,39 @@ all-TF consistency nor the target direction separated truth from noise here. One
 TF-score method chosen by me; a different TF-activity method, a smaller (kinase-level) PKN restriction, or a
 different dataset may behave differently. A fair test needs a null that matches the question (for example random
 targets compared with MEK at equal path counts), which was not completed because queries exceeded the time limit.
+
+# Follow-up (2026-11-27): hypothesis test, saturation and path length
+All scripts: `validation/gse329052_hypothesis_test.py`, `gse329052_depth_test.py`, `benchmarks/parity_ambiguity.py`.
+New package features used: `infer(root_states=...)` (impose a drug action on root nodes) and `infer(max_path_length=L)`
+(explanations of at most L edges; encoded exactly with distance pruning plus a totalizer cardinality constraint; 80 random
+cases agree with brute force, `tests/test_maxlen.py`).
+
+**Hypothesis test.** Hypothesis h = intervened root nodes with imposed states (MAP2K1 = MAP2K2 = -1 for trametinib). For a patient,
+n_explained(h) = number of the top-15 observed TFs (paired |t|) for which a path from h gives the observed sign. Null = 2,000
+random node pairs (both -1) with a reach comparable to MEK's; also every single node as a hypothesis. Per-TF explainability was
+computed by walk-parity BFS, which matched the SAT check on 120 of 120 (TF, state, hypothesis) cases without a length limit and
+168 of 168 with limits L = 2, 3, 4 (`tests`-style check in the console notes, MEK and random hypotheses).
+
+1. **No length limit: complete saturation.** Every hypothesis explained all 15 TFs (MEK -1 = MEK +1 = random median = 15 of 15
+   in all 4 patients, both TF-score variants, both drugs; MEK ranked 707 of 3,965 single-node hypotheses, i.e. a tie). The
+   cause is structural (`benchmarks/parity_ambiguity.py`, `docs/parity_ambiguity.csv`): on SIGNOR 99.9% of reachable
+   (source, node) pairs are reachable with BOTH signs (98.3% even for direct phosphorylation/dephosphorylation edges only; 4.5% for
+   transcriptional-regulation edges alone). Feedback and crosstalk make any sign possible, so sign consistency over unrestricted
+   simple paths carries almost no information on signalling PKNs.
+2. **Short paths restore discrimination (exploratory).** Means over 4 patients, TF-score variant `lfc` / `z`:
+| L (max edges) | MEKi data: MEK -1 explained (of 15) | MEKi: MEK +1 | random-pair median | share of random pairs >= MEK -1 | BCL-xL-inhibitor data: MEK -1 |
+|---|---|---|---|---|---|
+| 2 | 5 / 6 | 0 / 1 | 0 | 0.016 / 0.015 | 0 / 2 |
+| 3 | 10 / 10 | 6 / 8 | 1 / 2 | 0.015 / 0.019 | 5 / 6 |
+| 4 | 13 / 12 | 13 / 10 | 5 / 5 | 0.076 / 0.099 | 11 / 10 |
+| 5 | 15 / 14 | 15 / 13 | 11 / 10 | 0.149 / 0.172 | 12 / 12 |
+| >= 8 | 15 / 15 | 15 / 15 | 15 / 15 | 0.82-0.94 | 14 / 14 |
+   At L = 2-3 the known drug action explains clearly more of the MEK-inhibitor TF changes than reach-matched random pairs
+   (share about 0.015-0.02) and the wrong direction does not (share 0.07-0.35); the negative-control drug is explained less at
+   L = 2 (0 / 2 TFs). The effect disappears by L = 5. Caveats: one dataset, four patients, L chosen after looking at all values
+   (8 length-by-variant comparisons, no multiplicity correction), nulls matched on unrestricted reach only.
+
+**Consequence for the design.** The parameter-free formulation (no path-length limit) is nearly uninformative on signalling PKNs;
+`max_path_length` is therefore offered as an explicit, default-off option, and the PKN-ambiguity statistic should be checked before
+trusting an explanation result. Short paths mean the canonical cascade (MEK -> ERK -> TF within 2-3 edges) can be tested, which is
+consistent with the biology but is also what a plain shortest-path analysis would find.

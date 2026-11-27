@@ -119,7 +119,10 @@ author.
 * **Discrimination.** With random TF signs on SIGNOR 56 of 60 samples (k = 4, 8, 16) were jointly satisfiable, so
   "all TFs consistent" is a weak test at this PKN density; the structural root set (1,225 nodes in SIGNOR, 1,914 in
   OmniPath) is a very permissive definition of an upstream origin.
-* Biological validity: one real perturbation dataset was tried (`docs/validation.md`): real and sign-shuffled TF states
+* Options added after the real-data work: `infer(root_states={gene: +-1})` imposes states on intervened nodes, `infer(max_path_length=L)`
+  limits explanation paths to L edges (default off). Without a limit, 99.9% of reachable (source, node) pairs on SIGNOR are reachable
+  with both signs, so path signs hardly discriminate (`docs/validation.md`, `benchmarks/parity_ambiguity.py`).
+* Biological validity (earlier note, superseded by the follow-up in validation.md): one real perturbation dataset was tried (`docs/validation.md`): real and sign-shuffled TF states
   gave identical SAT/UNSAT results (SAT up to 20 TFs, UNSAT from 30) and both target directions explained the TFs, so
   no evidence of recovery beyond chance. Queries use cadical153 (soft time limit).
 * Complexes are not supported (SIGNOR complexes/families and OmniPath complex nodes are excluded by the readers).

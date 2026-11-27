@@ -73,3 +73,10 @@ all-TF consistency condition discriminates little; structural roots are very num
 * Validation on GSE329052 (MEK inhibitor, 4 patients): `docs/validation.md`. Result: pipeline works; no discrimination
   between real and sign-shuffled TF states, and the wrong target direction is also explained. Open: a better null,
   other TF-activity methods, a kinase-level PKN restriction, more datasets.
+
+## 2026-11-27 - hypothesis test, saturation, max_path_length
+Author: "すべて許可するから、全部進めて". Added `root_states`, `max_path_length` (exact; 80 brute-force tests), `edges=False`.
+Findings (docs/validation.md follow-up): unrestricted signed paths on SIGNOR/OmniPath-scale PKNs are saturated (any hypothesis explains
+any reachable TF with either sign), so the parameter-free design is almost uninformative there; with paths of 2-3 edges the known MEK action
+beats reach-matched random targets on the MEK-inhibitor organoid data (exploratory, one dataset). Not done: a second dataset, a kinase-level
+PKN restriction beyond the mechanism filters in parity_ambiguity.py, multiplicity-controlled choice of L, per-patient joint SAT at short L.

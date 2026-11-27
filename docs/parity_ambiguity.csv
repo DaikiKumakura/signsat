@@ -1,0 +1,6 @@
+PKN variant,edges,nodes,"reachable pairs, one sign",both signs,share ambiguous
+all signed protein-protein,5406,3390,656,473191,0.999
+DIRECT only,4651,3035,1118,319918,0.997
+direct phosphorylation / dephosphorylation,2339,1377,1769,99517,0.983
+direct phospho + transcriptional regulation,2549,1574,1223,127693,0.991
+transcriptional regulation only,780,800,1544,72,0.045

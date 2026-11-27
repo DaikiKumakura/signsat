@@ -69,6 +69,25 @@ class Graph:
                     dq.append(v)
         return seen
 
+    def distances(self, starts: list[int], forward: bool = True) -> np.ndarray:
+        """Unweighted BFS distance from the start nodes (along edges if forward, against them otherwise); large if unreachable."""
+        INF = 10**9
+        dist = np.full(self.n, INF, dtype=np.int64)
+        dq = deque()
+        for s in starts:
+            dist[s] = 0
+            dq.append(s)
+        adj = self.out_edges if forward else self.in_edges
+        nxt = self.dst if forward else self.src
+        while dq:
+            u = dq.popleft()
+            for k in adj[u]:
+                v = int(nxt[k])
+                if dist[v] == INF:
+                    dist[v] = dist[u] + 1
+                    dq.append(v)
+        return dist
+
     def backward_reachable(self, target: int) -> np.ndarray:
         seen = np.zeros(self.n, dtype=bool)
         seen[target] = True

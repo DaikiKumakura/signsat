@@ -65,13 +65,15 @@ class Region:
 
 class SampleModel:
     def __init__(self, graph: Graph, roots: list[int], obs: dict[int, int], *, solver: str = "cadical153",
-                 conflict_budget: int | None = None, order_encoding: bool = True):
+                 conflict_budget: int | None = None, order_encoding: bool = True,
+                 fixed_states: dict[int, int] | None = None, max_path_length: int | None = None):
         self.g = graph
         self.roots = set(roots)
         self.obs = dict(obs)  # node index -> +1/-1
         self.solver_name = solver
         self.conflict_budget = conflict_budget
         self.order_encoding = order_encoding
+        self.max_path_length = max_path_length
         self.deadline: float | None = None  # time.monotonic() value after which solving is interrupted
         self.nvar = 0
         self.clauses: list[list[int]] = []
@@ -89,6 +91,8 @@ class SampleModel:
         self.incomplete = False
         self._solver = None
         self._build()
+        for v, st in (fixed_states or {}).items():  # states imposed on (root) nodes, e.g. a drug action
+            self.add([self.zvar(v) if st == 1 else -self.zvar(v)])
 
     # ------------------------------------------------------------------ helpers
     def new_var(self) -> int:
@@ -148,6 +152,7 @@ class SampleModel:
     def _build(self) -> None:
         g = self.g
         fwd = g.forward_reachable(sorted(self.roots))
+        dist_from_roots = g.distances(sorted(self.roots), forward=True) if self.max_path_length is not None else None
         for f in self.obs:
             self.zvar(f)
             if not fwd[f]:
@@ -155,7 +160,18 @@ class SampleModel:
                 continue
             back = g.backward_reachable(f)
             nodes = {v for v in range(g.n) if fwd[v] and back[v]}
-            edges = [k for k in range(len(g.src)) if g.src[k] != g.dst[k] and int(g.src[k]) in nodes and int(g.dst[k]) in nodes]
+            if self.max_path_length is not None:  # an edge must lie on a walk of at most L edges from a root to f
+                L = self.max_path_length
+                df_ = dist_from_roots
+                dt_ = g.distances([f], forward=False)
+                if df_[f] > L:
+                    self.unreachable.append(f)
+                    continue
+                nodes = {v for v in nodes if df_[v] + dt_[v] <= L}
+                edges = [k for k in range(len(g.src)) if g.src[k] != g.dst[k] and int(g.src[k]) in nodes and int(g.dst[k]) in nodes
+                         and df_[int(g.src[k])] + 1 + dt_[int(g.dst[k])] <= L]
+            else:
+                edges = [k for k in range(len(g.src)) if g.src[k] != g.dst[k] and int(g.src[k]) in nodes and int(g.dst[k]) in nodes]
             self.regions[f] = Region(nodes, edges)
         if self.unreachable:
             return
@@ -164,6 +180,13 @@ class SampleModel:
             for k in reg.edges:
                 self.p[(f, k)] = self.new_var()
             self.p_by_f[f] = [(k, self.p[(f, k)]) for k in reg.edges]
+            if self.max_path_length is not None and len(reg.edges) > self.max_path_length:
+                from pysat.card import CardEnc, EncType
+                cnf = CardEnc.atmost(lits=[self.p[(f, k)] for k in reg.edges], bound=self.max_path_length, top_id=self.nvar,
+                                     encoding=EncType.totalizer)
+                self.nvar = max(self.nvar, cnf.nv)
+                for cl in cnf.clauses:
+                    self.add(list(cl))
             for v in reg.nodes:
                 ins = [self.p[(f, k)] for k in g.in_edges[v] if k in eset]
                 outs = [self.p[(f, k)] for k in g.out_edges[v] if k in eset]

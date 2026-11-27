@@ -99,3 +99,13 @@ def test_cycle_not_part_of_explanation():
     r = ss.infer(tf_scores=pd.DataFrame({"T": [1]}, index=["s"]), pkn=pkn)
     ids = set(r.network("s").edges["edge_id"])
     assert ids == {"e1"}
+
+
+def test_root_states_fix_the_hypothesis():
+    # R=+1 forced: TF2=+1 is explained via B or C but not A; R=-1 forced contradicts TF1=+1
+    ok = ss.infer(tf_states=pd.DataFrame({"TF1": [1], "TF2": [1]}, index=["s"]), pkn=PKN, roots=["R"], root_states={"R": 1})
+    assert ok.network("s").status == "SAT"
+    bad = ss.infer(tf_states=pd.DataFrame({"TF1": [1]}, index=["s"]), pkn=PKN, roots=["R"], root_states={"R": -1})
+    assert bad.network("s").status == "UNSAT"
+    with pytest.raises(ValueError):
+        ss.infer(tf_states=TF.replace({-1: 0}), pkn=PKN, root_states={"NOPE": 1})

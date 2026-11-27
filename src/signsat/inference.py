@@ -111,7 +111,7 @@ def analyze_sample(model: SampleModel, graph: Graph, name: str, sample_obs_names
             "witness": witness, "cycle_clauses": model.n_cycle_clauses}
 
 
-def _portfolio_model(G, root_idx, obs, conflict_budget, order_encoding, time_limit):
+def _portfolio_model(G, root_idx, obs, conflict_budget, order_encoding, time_limit, fixed=None, max_path_length=None):
     """Satisfiability check with alternating solvers (maplechrono, glucose4, then cadical153 without interruption). On the
     real PKNs tried no solver was best everywhere: each one failed within 60 s on some formula another solved in seconds. Returns the model whose solver finished, or None."""
     total = float("inf") if time_limit is None else float(time_limit)
@@ -122,7 +122,8 @@ def _portfolio_model(G, root_idx, obs, conflict_budget, order_encoding, time_lim
         rem = end - time.monotonic()
         if rem <= 0:
             break
-        model = SampleModel(G, root_idx, obs, solver=name, conflict_budget=conflict_budget, order_encoding=order_encoding)
+        model = SampleModel(G, root_idx, obs, solver=name, conflict_budget=conflict_budget, order_encoding=order_encoding,
+                            fixed_states=fixed, max_path_length=max_path_length)
         model.set_time_limit(min(sl, end - time.monotonic()))
         r = model.solve(model.obs_lits())
         if r is not None:
@@ -146,7 +147,8 @@ def check_only(model: SampleModel) -> dict:
 
 def infer(tf_scores=None, pkn=None, *, tf_states=None, roots: list[str] | None = None, solver: str = "auto",
           conflict_budget: int | None = None, order_encoding: bool = True, classify: bool = True,
-          time_limit: float | None = None) -> Result:
+          time_limit: float | None = None, root_states: dict[str, int] | None = None,
+          max_path_length: int | None = None) -> Result:
     """Reconstruct, for every sample, the set of causal networks that explain all observed TFs at once."""
     if pkn is None:
         raise ValueError("pkn is required")
@@ -164,6 +166,14 @@ def infer(tf_scores=None, pkn=None, *, tf_states=None, roots: list[str] | None =
         root_idx = sorted(G.index[r] for r in names)
         roots_source = "user-supplied"
     tf_names = list(states.columns)
+    fixed = None
+    if root_states:
+        bad = [g for g in root_states if normalize_gene(g) not in G.index]
+        if bad:
+            raise ValueError(f"root_states genes not in the PKN: {bad}")
+        fixed = {G.index[normalize_gene(g)]: int(v) for g, v in root_states.items()}
+        if any(v not in (1, -1) for v in fixed.values()):
+            raise ValueError("root_states values must be +1 or -1")
     unmapped = [t for t in tf_names if t not in G.index]
     result = Result(pkn=P, tf_states=states, roots=[G.nodes[i] for i in root_idx], roots_source=roots_source,
                     solver=solver, unmapped_tfs=unmapped,
@@ -179,7 +189,7 @@ def infer(tf_scores=None, pkn=None, *, tf_states=None, roots: list[str] | None =
             net.pkn_edges = P.edges
             result.add(net)
             continue
-        net = _infer_one(sample, obs_named, dropped, G, root_idx, solver, conflict_budget, order_encoding, classify, time_limit)
+        net = _infer_one(sample, obs_named, dropped, G, root_idx, solver, conflict_budget, order_encoding, classify, time_limit, fixed, max_path_length)
         net.pkn_edges = P.edges
         cache[key] = net
         result.add(net)
@@ -188,7 +198,7 @@ def infer(tf_scores=None, pkn=None, *, tf_states=None, roots: list[str] | None =
 
 def _infer_one(sample, obs_named: dict[str, int], dropped: list[str], G: Graph, root_idx: list[int], solver: str,
                conflict_budget, order_encoding: bool = True, classify: bool = True,
-               time_limit: float | None = None) -> SampleNetwork:
+               time_limit: float | None = None, fixed=None, max_path_length: int | None = None) -> SampleNetwork:
     diag = [{"sample": sample, "level": "info", "code": "TF_NOT_IN_PKN", "detail": t} for t in dropped]
     obs = {G.index[t]: s for t, s in obs_named.items()}
     net = SampleNetwork(sample=sample, status=STATUS_NO_OBS, graph=G, roots=root_idx, obs=obs_named)
@@ -197,12 +207,13 @@ def _infer_one(sample, obs_named: dict[str, int], dropped: list[str], G: Graph, 
         net._finish_empty()
         return net
     if solver == "auto":
-        model = _portfolio_model(G, root_idx, obs, conflict_budget, order_encoding, time_limit)
+        model = _portfolio_model(G, root_idx, obs, conflict_budget, order_encoding, time_limit, fixed, max_path_length)
         if model is not None and classify and model.chosen_solver != "cadical153":
             # classification issues thousands of incremental calls; on the real PKNs cadical153 proved about 3x more
             # edges per minute than maplechrono. The satisfiability result is already known, so rebuild with it.
             end = model._auto_deadline
-            model = SampleModel(G, root_idx, obs, solver="cadical153", conflict_budget=conflict_budget, order_encoding=order_encoding)
+            model = SampleModel(G, root_idx, obs, solver="cadical153", conflict_budget=conflict_budget, order_encoding=order_encoding,
+                                fixed_states=fixed, max_path_length=max_path_length)
             model._auto_deadline = end
             model.chosen_solver = "cadical153"
         time_limit = None if model is None or time_limit is None else max(0.0, model._auto_deadline - time.monotonic())
@@ -213,7 +224,8 @@ def _infer_one(sample, obs_named: dict[str, int], dropped: list[str], G: Graph, 
             net._finish_empty()
             return net
     else:
-        model = SampleModel(G, root_idx, obs, solver=solver, conflict_budget=conflict_budget, order_encoding=order_encoding)
+        model = SampleModel(G, root_idx, obs, solver=solver, conflict_budget=conflict_budget, order_encoding=order_encoding,
+                            fixed_states=fixed, max_path_length=max_path_length)
     if model.unreachable:
         net.status = STATUS_UNREACHABLE
         for f in model.unreachable:
