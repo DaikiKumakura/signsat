@@ -10,8 +10,8 @@ Status: **0.1.0.dev0, early development** (not released, not on PyPI).
 **What it is not (so far):** a method that identifies a drug's mechanism of action. On the signalling PKNs tested (SIGNOR,
 OmniPath), unrestricted signed paths explain almost anything: 99.9% of reachable (source, node) pairs on SIGNOR are reachable with
 both signs, so real and sign-shuffled TF states behave identically and every hypothesis explains every reachable TF. Recovery of a
-known drug target beyond chance was seen once (MEK inhibitor, paths of at most 2-3 edges) and was **not replicated** in a
-pre-registered test on a second dataset (BRAF inhibitor). See [Validation and limitations](#validation-and-limitations).
+known drug target beyond chance was seen once (MEK inhibitor, paths of at most 2-3 edges) and was **not replicated**: a
+pre-registered test on a second dataset (BRAF inhibitor) and a pre-registered phosphoproteomics test (three kinase inhibitors) both failed. See [Validation and limitations](#validation-and-limitations).
 
 Where it is informative: networks or edge sets in which feedback and crosstalk are limited (for example transcription-factor
 regulation edges only, 4.5% ambiguous pairs), hand-curated pathway models, and sanity checks of a proposed explanation (does a
@@ -95,9 +95,16 @@ observations), UNREACHABLE, NO_OBSERVATIONS, INCOMPLETE.
 - **Mechanism recovery (not established):** with `max_path_length` 2-3 the known MEK action explained more TF changes than reach-matched
   random targets (exploratory, one dataset). A pre-registered replication on BRAF-inhibitor-treated A375 cells (GSE325686) failed: BRAF -1 and
   BRAF +1 explained the same number of TFs and 22.6% of random nodes did as well or better.
-- **Not tested:** other TF-activity methods, kinase-substrate (phospho) readouts, other PKNs, more datasets, any clinical or drug-response use.
+- **Phosphoproteomics (pre-registered, not met):** A375 cells, 30 min, dabrafenib / trametinib / SCH772984 (PXD013923), kinase activities from
+  OmniPath kinase-substrate pairs, 15 observed kinases per drug, path length 3. Primary criterion (trametinib: MEK -1 beats reach-matched random
+  pairs, MEK +1 does not): MEK -1 explained 12 of 45 kinase states, share of random pairs as good = 0.0595 (needs < 0.05); met in 0 of 3 drugs.
+  Dabrafenib: BRAF -1 and +1 identical (6 and 6). SCH772984: both signs significant (p = 0.001 and 0.0035). A sign-specific result at
+  length 2 for SCH772984 (p = 0.0005 vs 0.0855) was secondary and is not claimed. With unrestricted paths everything is explained (p = 1.0).
+  Caveat: the kinase scores and the PKN share prior knowledge, so this test is not independent of the pathway.
+- **Not tested:** other TF-activity or kinase-activity methods, phosphosite-level nodes, other PKNs, more datasets, any clinical or drug-response use.
 - Details, numbers and the pre-registered protocol: [docs/validation.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/validation.md),
   [docs/replication_protocol.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/replication_protocol.md),
+  [docs/phospho_protocol.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/phospho_protocol.md),
   [docs/benchmarks.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/benchmarks.md).
 
 ## Citation
