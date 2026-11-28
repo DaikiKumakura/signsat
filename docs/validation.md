@@ -96,3 +96,27 @@ Protocol fixed and committed before analysis: `docs/replication_protocol.md` (co
 in this dataset under a pre-registered test. With one positive and one negative dataset, the claim that `max_path_length` makes
 explanations discriminate is withdrawn as established; it remains an unreplicated, exploratory observation. What stands:
 unrestricted signed paths are saturated on SIGNOR (99.9% ambiguous pairs), so sign consistency alone does not identify a mechanism.
+
+## Phosphoproteomics test (PXD013923, A375, 30 min; protocol `docs/phospho_protocol.md` committed before analysis, bef62f0)
+
+Script `validation/phospho_a375.py`, output `validation/phospho_a375_console.txt`, `validation/phospho_a375_results.csv`.
+Data: Table S1 of Sci Rep 2019 (doi 10.1038/s41598-019-47245-x), 7,827 sites, SILAC ratios versus DMSO, 3 replicates per drug.
+Kinase scores from OmniPath enzyme-substrate pairs (1,347 of 7,827 sites matched, 4,262 pairs); 168-179 kinases defined per drug;
+15 observed kinases per drug; null of 2,000 random reach-matched hypotheses.
+
+Facts (from the output):
+- Sanity gate passed: the MAPK1/MAPK3 activation-loop sites fall by 2.0 to 3.1 log2 units under all three drugs.
+- Primary criterion (trametinib, L = 3): MEK(-1) explains 12 of 45 observed kinase-states (null median 0, max 24); share of random pairs >= 12 is
+  0.0595 (not < 0.05); MEK(+1) 3, share 0.4565. **Criterion not met** (by a narrow margin).
+- Dabrafenib, L = 3: BRAF(-1) and BRAF(+1) both explain 6; p = 0.1115 for both. No discrimination.
+- SCH772984, L = 3: ERK(-1) 27, p = 0.001, but ERK(+1) 24, p = 0.0035: the wrong sign is also significant. At L = 2 (not primary) ERK(-1) 15, p = 0.0005
+  versus ERK(+1) 6, p = 0.0855.
+- Unlimited path length: every hypothesis explains almost everything (36-39 of 45; null median equals the hypothesis), p = 1.0: the saturation seen
+  with TF data is the same here.
+- Criterion met at L = 3 in 0 of 3 drugs, so no cross-drug claim.
+
+Interpretation (not established): with kinase-substrate-derived scores, SignSAT does not recover the drug target at the pre-specified depth.
+The only sign-specific signal is the secondary SCH772984 L = 2 result, which was not a pre-registered success and was not repeated. Caveats: the
+observed "kinases" include non-kinases present in the enzyme-substrate table (e.g. PPP2CA, FGF2, TNF), scores come from few sites, ties between +1/-1
+paths are common at L = 3, and prior knowledge (OmniPath/SIGNOR) is not independent of the MAPK pathway. Not done: phosphosite-level nodes,
+other kinase-activity estimators, other PKNs.

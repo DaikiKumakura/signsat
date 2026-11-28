@@ -1,0 +1,28 @@
+sites in table: 7827
+gate Dabrafenib: n_sites=4 values=[-3.07732, -2.91182, -2.58123, -2.58123]
+gate Trametinib: n_sites=4 values=[-2.94625, -2.17555, -2.37914, -2.37914]
+gate SCH772984: n_sites=4 values=[-2.61288, -2.00218, -2.54599, -2.54599]
+table sites matched to a kinase-substrate pair: 1347 of 7827 sites; pairs 4262
+
+== Dabrafenib: kinases defined 177, observed 15 ['PPP2CA', 'ROCK2', 'LIMK1', 'GSK3B', 'KSR1', 'PPP2CB', 'MAPK9', 'CSNK2A1', 'ARF6', 'DUSP6', 'DUSP3', 'MAP2K2', 'MAP3K14', 'PLD2', 'RAP1A']; hypothesis reach 12.0; null 2000
+{'drug': 'Dabrafenib', 'L': 3, 'observed_total': 45, 'H(-1)': 6, 'H(+1)': 6, 'null_median': 0.0, 'null_max': 15, 'null_n': 2000, 'p_ge_H(-1)': 0.1115, 'p_ge_H(+1)': 0.1115, 'rank_best_single_node': 40}
+{'drug': 'Dabrafenib', 'L': 2, 'observed_total': 45, 'H(-1)': 3, 'H(+1)': 3, 'null_median': 0.0, 'null_max': 6, 'null_n': 2000, 'p_ge_H(-1)': 0.126, 'p_ge_H(+1)': 0.126, 'rank_best_single_node': 14}
+{'drug': 'Dabrafenib', 'L': 4, 'observed_total': 45, 'H(-1)': 15, 'H(+1)': 12, 'null_median': 3.0, 'null_max': 30, 'null_n': 2000, 'p_ge_H(-1)': 0.0695, 'p_ge_H(+1)': 0.126, 'rank_best_single_node': 36}
+{'drug': 'Dabrafenib', 'L': 'inf', 'observed_total': 45, 'H(-1)': 36, 'H(+1)': 36, 'null_median': 36.0, 'null_max': 39, 'null_n': 2000, 'p_ge_H(-1)': 1.0, 'p_ge_H(+1)': 1.0, 'rank_best_single_node': 3}
+
+== Trametinib: kinases defined 168, observed 15 ['MAP2K3', 'PRKAB1', 'PRKCQ', 'DUSP1', 'KSR1', 'SRPK2', 'MAP3K8', 'PTPN7', 'FGF2', 'DYRK1B', 'BRAF', 'MAPK13', 'PPP2CA', 'MAPK9', 'AURKB']; hypothesis reach 12.0; null 2000
+{'drug': 'Trametinib', 'L': 3, 'observed_total': 45, 'H(-1)': 12, 'H(+1)': 3, 'null_median': 0.0, 'null_max': 24, 'null_n': 2000, 'p_ge_H(-1)': 0.0595, 'p_ge_H(+1)': 0.4565, 'rank_best_single_node': None}
+{'drug': 'Trametinib', 'L': 2, 'observed_total': 45, 'H(-1)': 3, 'H(+1)': 3, 'null_median': 0.0, 'null_max': 12, 'null_n': 2000, 'p_ge_H(-1)': 0.1845, 'p_ge_H(+1)': 0.1845, 'rank_best_single_node': None}
+{'drug': 'Trametinib', 'L': 4, 'observed_total': 45, 'H(-1)': 15, 'H(+1)': 12, 'null_median': 6.0, 'null_max': 30, 'null_n': 2000, 'p_ge_H(-1)': 0.228, 'p_ge_H(+1)': 0.323, 'rank_best_single_node': None}
+{'drug': 'Trametinib', 'L': 'inf', 'observed_total': 45, 'H(-1)': 36, 'H(+1)': 36, 'null_median': 36.0, 'null_max': 39, 'null_n': 2000, 'p_ge_H(-1)': 1.0, 'p_ge_H(+1)': 1.0, 'rank_best_single_node': None}
+
+== SCH772984: kinases defined 179, observed 15 ['TNF', 'RPS6KA3', 'MAP2K1', 'PAK1', 'KSR1', 'PPP2CA', 'MAP2K3', 'IL2', 'BRAF', 'IQGAP1', 'CDK11B', 'FGF2', 'RPS6KA1', 'CDK1', 'PTPN7']; hypothesis reach 13.0; null 2000
+{'drug': 'SCH772984', 'L': 3, 'observed_total': 45, 'H(-1)': 27, 'H(+1)': 24, 'null_median': 3.0, 'null_max': 27, 'null_n': 2000, 'p_ge_H(-1)': 0.001, 'p_ge_H(+1)': 0.0035, 'rank_best_single_node': None}
+{'drug': 'SCH772984', 'L': 2, 'observed_total': 45, 'H(-1)': 15, 'H(+1)': 6, 'null_median': 0.0, 'null_max': 15, 'null_n': 2000, 'p_ge_H(-1)': 0.0005, 'p_ge_H(+1)': 0.0855, 'rank_best_single_node': None}
+{'drug': 'SCH772984', 'L': 4, 'observed_total': 45, 'H(-1)': 36, 'H(+1)': 30, 'null_median': 9.0, 'null_max': 36, 'null_n': 2000, 'p_ge_H(-1)': 0.004, 'p_ge_H(+1)': 0.037, 'rank_best_single_node': None}
+{'drug': 'SCH772984', 'L': 'inf', 'observed_total': 45, 'H(-1)': 39, 'H(+1)': 39, 'null_median': 39.0, 'null_max': 42, 'null_n': 2000, 'p_ge_H(-1)': 1.0, 'p_ge_H(+1)': 1.0, 'rank_best_single_node': None}
+
+PRIMARY (protocol 6, trametinib L=3): p(MEK-1) = 0.0595 p(MEK+1) = 0.4565 -> criterion NOT met
+Dabrafenib L=3 met: False
+Trametinib L=3 met: False
+SCH772984 L=3 met: False
