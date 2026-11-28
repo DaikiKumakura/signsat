@@ -11,7 +11,7 @@ Status: **0.1.0.dev0, early development** (not released, not on PyPI).
 OmniPath), unrestricted signed paths explain almost anything: 99.9% of reachable (source, node) pairs on SIGNOR are reachable with
 both signs, so real and sign-shuffled TF states behave identically and every hypothesis explains every reachable TF. Recovery of a
 known drug target beyond chance was seen once (MEK inhibitor, paths of at most 2-3 edges) and was **not replicated**: a
-pre-registered test on a second dataset (BRAF inhibitor) and a pre-registered phosphoproteomics test (three kinase inhibitors) both failed. See [Validation and limitations](#validation-and-limitations).
+pre-registered test on a second dataset (BRAF inhibitor) and a pre-registered phosphoproteomics test (three kinase inhibitors, three estimators) both failed. See [Validation and limitations](#validation-and-limitations).
 
 Where it is informative: networks or edge sets in which feedback and crosstalk are limited (for example transcription-factor
 regulation edges only, 4.5% ambiguous pairs), hand-curated pathway models, and sanity checks of a proposed explanation (does a
@@ -100,11 +100,15 @@ observations), UNREACHABLE, NO_OBSERVATIONS, INCOMPLETE.
   pairs, MEK +1 does not): MEK -1 explained 12 of 45 kinase states, share of random pairs as good = 0.0595 (needs < 0.05); met in 0 of 3 drugs.
   Dabrafenib: BRAF -1 and +1 identical (6 and 6). SCH772984: both signs significant (p = 0.001 and 0.0035). A sign-specific result at
   length 2 for SCH772984 (p = 0.0005 vs 0.0855) was secondary and is not claimed. With unrestricted paths everything is explained (p = 1.0).
+  Repeating the test with kinase-only lists and two other estimators (KSEA z-score, rank-sum; pre-registered second protocol) did not change
+  the outcome: primary criterion again not met (KSEA, trametinib: share 0.090 vs needed < 0.05), 0 of 3 drugs with KSEA. One of nine secondary
+  cells (rank-sum, SCH772984) met it and was not reproduced by the other estimators.
   Caveat: the kinase scores and the PKN share prior knowledge, so this test is not independent of the pathway.
-- **Not tested:** other TF-activity or kinase-activity methods, phosphosite-level nodes, other PKNs, more datasets, any clinical or drug-response use.
+- **Not tested:** other TF-activity methods, other phospho datasets, phosphosite-level nodes, other PKNs, more datasets, any clinical or drug-response use.
 - Details, numbers and the pre-registered protocol: [docs/validation.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/validation.md),
   [docs/replication_protocol.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/replication_protocol.md),
   [docs/phospho_protocol.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/phospho_protocol.md),
+  [docs/phospho_protocol_2.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/phospho_protocol_2.md),
   [docs/benchmarks.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/benchmarks.md).
 
 ## Citation

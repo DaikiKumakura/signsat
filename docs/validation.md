@@ -120,3 +120,25 @@ The only sign-specific signal is the secondary SCH772984 L = 2 result, which was
 observed "kinases" include non-kinases present in the enzyme-substrate table (e.g. PPP2CA, FGF2, TNF), scores come from few sites, ties between +1/-1
 paths are common at L = 3, and prior knowledge (OmniPath/SIGNOR) is not independent of the MAPK pathway. Not done: phosphosite-level nodes,
 other kinase-activity estimators, other PKNs.
+
+### Second kinase-activity estimators (same data; protocol `docs/phospho_protocol_2.md`, committed before running)
+
+Script `validation/phospho_a375_estimators.py`, output `validation/phospho_a375_estimators_console.txt`, `..._results.csv`.
+Only protein kinases from kinase.com were kept (3,420 pairs, 272 kinases; the earlier non-kinase "kinases" are gone). Estimators: B KSEA z-score
+(primary), C kinase-filtered mean logFC, D rank-sum z. Seed 20261129, 2,000 random hypotheses each, L = 3 primary.
+
+Facts (L = 3; share of random hypotheses as good as the hypothesis; -1 = correct direction, +1 = wrong direction):
+| estimator | drug | H(-1) | share | H(+1) | share | criterion |
+|---|---|---|---|---|---|---|
+| B | trametinib (primary) | 12 | 0.090 | 6 | 0.266 | not met |
+| B | dabrafenib | 6 | 0.197 | 9 | 0.130 | not met |
+| B | SCH772984 | 21 | 0.045 | 21 | 0.045 | not met (wrong direction equal) |
+| C | trametinib / dabrafenib / SCH772984 | 15 / 12 / 30 | 0.084 / 0.075 / 0.012 | 9 / 9 / 24 | 0.231 / 0.122 / 0.035 | not met in all 3 |
+| D | trametinib / dabrafenib | 12 / 9 | 0.160 / 0.126 | 12 / 12 | 0.160 / 0.065 | not met |
+| D | SCH772984 | 24 | 0.000 | 15 | 0.059 | met |
+Unlimited path length: every hypothesis explains all or nearly all observed states (p = 1.0 in all 9 estimator-drug cells).
+
+Primary criterion (B, trametinib, L = 3) **not met**; met in 0 of 3 drugs for B, so by protocol no cross-drug claim and no further estimator is tried
+on these data. The one "met" cell (D, SCH772984) is one of 9 descriptive cells, was not reproduced by B or C on the same drug, and its other lengths do not
+agree (L = 2: H(-1) p = 0.311, H(+1) p = 0.022). Not corrected for multiple looks. The two datasets (A375) and two estimator families used here did not
+establish recovery of the drug target; this is also not independent of the first phosphoproteomics run (same data).
