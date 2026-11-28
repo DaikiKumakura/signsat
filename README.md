@@ -1,14 +1,28 @@
 # SignSAT
 
-SAT-based reconstruction of sample-specific signed causal networks from TF activity and a signed prior-knowledge
-network (PKN). Status: **0.1.0.dev0, early development** (not released, not on PyPI).
+A SAT-based tool for checking whether observed transcription-factor (TF) changes can be explained, all at once, by sign-consistent
+paths in a signed prior-knowledge network (PKN), and for listing the possible and necessary edges of such explanations.
+Status: **0.1.0.dev0, early development** (not released, not on PyPI).
+
+**What it is:** an exact consistency and explainability checker for small, sparse or hand-restricted signed networks
+(SAT/UNSAT per sample with the minimal conflicting observations, Possible / Necessary edges, queries on a drug-action hypothesis).
+
+**What it is not (so far):** a method that identifies a drug's mechanism of action. On the signalling PKNs tested (SIGNOR,
+OmniPath), unrestricted signed paths explain almost anything: 99.9% of reachable (source, node) pairs on SIGNOR are reachable with
+both signs, so real and sign-shuffled TF states behave identically and every hypothesis explains every reachable TF. Recovery of a
+known drug target beyond chance was seen once (MEK inhibitor, paths of at most 2-3 edges) and was **not replicated** in a
+pre-registered test on a second dataset (BRAF inhibitor). See [Validation and limitations](#validation-and-limitations).
+
+Where it is informative: networks or edge sets in which feedback and crosstalk are limited (for example transcription-factor
+regulation edges only, 4.5% ambiguous pairs), hand-curated pathway models, and sanity checks of a proposed explanation (does a
+given set of TF changes contradict the network?).
 
 ## Installation
 
 ```
 python -m venv .venv
 .venv/Scripts/python -m pip install -e . pytest       # Windows; python-sat, numpy, pandas, scipy are dependencies
-.venv/Scripts/python -m pytest -q                      # 291 tests, about 40 s
+.venv/Scripts/python -m pytest -q                      # 375 tests, about 1 minute
 ```
 
 ## Quick start
@@ -24,6 +38,7 @@ tf = pd.DataFrame({"TF1": [1.2, 0.8, -2.0], "TF2": [0.5, -1.1, None]}, index=["S
 
 res = ss.infer(tf_scores=tf, pkn=pkn)          # or tf_states=... with 1 / 0 / NA
 # large PKNs: res = ss.infer(..., classify=False, time_limit=60)  # satisfiability only; queries still work
+# options: root_states={"MAP2K1": -1} (impose a drug action), max_path_length=3 (default: no limit; benefit unproven)
 net = res.network("S1")
 net.edges                  # Necessary / Alternative edges with signs
 net.node_states            # possible states of each node
@@ -69,11 +84,21 @@ observations), UNREACHABLE, NO_OBSERVATIONS, INCOMPLETE.
 
 ## Validation and limitations
 
-- **Validation:** Compared small graphs with brute-force enumeration and benchmarked public signed networks with simulated TF states.
-- **Results:** Satisfiability checks ran on SIGNOR and OmniPath at the tested scales.
-- **Limitations:** Exhaustive classifications and some queries timed out. These experiments do not validate biological predictions.
-- **Real perturbation data:** On one MEK-inhibitor dataset, unrestricted paths explain everything (99.9% of reachable pairs are reachable with both signs on SIGNOR), so real and sign-shuffled TF states behave identically. `max_path_length=2` or `3` restored discrimination on one MEK-inhibitor dataset, but a pre-registered replication on BRAF-inhibitor-treated melanoma cells failed (no directional specificity), so that effect is not established ([docs/validation.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/validation.md)).
-- **Reproduction:** [docs/benchmarks.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/benchmarks.md).
+- **Correctness (established):** results equal an independent brute-force enumeration on 120 random small graphs (inference), 120 random
+  queries and 80 random cases with a path-length limit; the SAT encoding agrees with a lazy-cycle variant.
+- **Scale (measured, simulated TF states):** the satisfiability check runs on SIGNOR (6.9k edges) and OmniPath (73k edges) for 16-32
+  observed TFs in seconds to under a minute. Exhaustive Possible/Necessary classification does **not** finish in 60 s even for 2 TFs on
+  SIGNOR, and many queries reach a 60 s limit (reported as incomplete, never as final).
+- **Discrimination (negative):** with unrestricted paths the all-TF consistency test does not separate real from sign-shuffled TF
+  states (MEK-inhibitor organoids, GSE329052: both satisfiable up to 20 TFs, both unsatisfiable from 30), and the wrong drug direction is
+  "explained" as well.
+- **Mechanism recovery (not established):** with `max_path_length` 2-3 the known MEK action explained more TF changes than reach-matched
+  random targets (exploratory, one dataset). A pre-registered replication on BRAF-inhibitor-treated A375 cells (GSE325686) failed: BRAF -1 and
+  BRAF +1 explained the same number of TFs and 22.6% of random nodes did as well or better.
+- **Not tested:** other TF-activity methods, kinase-substrate (phospho) readouts, other PKNs, more datasets, any clinical or drug-response use.
+- Details, numbers and the pre-registered protocol: [docs/validation.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/validation.md),
+  [docs/replication_protocol.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/replication_protocol.md),
+  [docs/benchmarks.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/benchmarks.md).
 
 ## Citation
 

@@ -1,12 +1,15 @@
 # SignSAT guide
 
-SAT-based reconstruction of sample-specific signed causal networks from TF activity and a signed prior-knowledge
-network (PKN). Status: **0.1.0.dev0, early development** (not released, not on PyPI).
+SignSAT checks whether observed TF changes can be explained at once by sign-consistent paths in a signed prior-knowledge network
+(PKN) and lists the possible and necessary edges. Status: **0.1.0.dev0, early development** (not released, not on PyPI).
 
-For every sample the package returns the set of causal networks in which one simple path from an upstream root to
-each observed TF exists, all paths are sign-consistent with each other, and each observed TF has the observed
-state. Edges are classified as Necessary / Alternative (possible, not necessary); nothing is pruned by top-k, path
-length, regularisation or score thresholds. Details and definitions: [SPEC.md](SPEC.md).
+For every sample the package returns the set of causal networks in which one simple path from an upstream root to each observed TF exists,
+all paths are sign-consistent with each other, and each observed TF has the observed state. Edges are classified as Necessary / Alternative
+(possible, not necessary); by default nothing is pruned by top-k, path length, regularisation or score thresholds.
+
+**Read the limits first:** on signalling PKNs such as SIGNOR and OmniPath, unrestricted signed paths explain almost anything (99.9% of
+reachable pairs have both signs), so the result is not evidence for a drug's mechanism; see the README section "Validation and limitations"
+and [SPEC.md](SPEC.md).
 
 <a id="install-for-development"></a>
 
@@ -15,7 +18,7 @@ length, regularisation or score thresholds. Details and definitions: [SPEC.md](S
 ```
 python -m venv .venv
 .venv/Scripts/python -m pip install -e . pytest       # Windows; python-sat, numpy, pandas, scipy are dependencies
-.venv/Scripts/python -m pytest -q                      # 291 tests, about 40 s
+.venv/Scripts/python -m pytest -q                      # 375 tests, about 1 minute
 ```
 
 ## Quick start

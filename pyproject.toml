@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "signsat"
 version = "0.1.0.dev0"
-description = "SAT-based signed causal network reconstruction from TF activity and a signed prior-knowledge network"
+description = "SAT-based consistency and explainability checks of TF changes against a signed prior-knowledge network"
 readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "Daiki Kumakura"}]
