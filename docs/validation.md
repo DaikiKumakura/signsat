@@ -75,3 +75,24 @@ computed by walk-parity BFS, which matched the SAT check on 120 of 120 (TF, stat
 `max_path_length` is therefore offered as an explicit, default-off option, and the PKN-ambiguity statistic should be checked before
 trusting an explanation result. Short paths mean the canonical cascade (MEK -> ERK -> TF within 2-3 edges) can be tested, which is
 consistent with the biology but is also what a plain shortest-path analysis would find.
+
+# Replication attempt (2026-11-28): A375 melanoma, vemurafenib (GSE325686) - NOT replicated
+Protocol fixed and committed before analysis: `docs/replication_protocol.md` (commit 7b5994c). Script
+`validation/replication_a375_vemurafenib.py` followed it without deviation; console output in
+`validation/replication_a375_console.txt`, table `docs/replication_a375_results.csv`.
+
+* Sanity gate passed: paired log2 change under vemurafenib DUSP6 -5.0, SPRY4 -7.2, ETV4 -7.2, ETV5 -5.7, DUSP4 -0.4.
+* **Primary criterion (BRAF = -1, L = 3, `lfc`, 4 units, 15 TFs each): NOT met.** BRAF -1 explained 8 of 60 TF observations;
+  the wrong direction (BRAF +1) also explained 8 of 60; 22.6% of 2,000 reach-matched random nodes explained at least as many
+  (criterion: below 5% for BRAF -1 and at least 5% for BRAF +1). No directional specificity at all.
+* Secondary (descriptive): L = 2: BRAF explains 0 of 60 (BRAF -> MAP2K -> MAPK -> TF needs 3 edges); L = 4: 32 of 60 for both
+  directions (share of random nodes >= 6.4%); `z` variant L = 3: 4 of 60 (BRAF -1 and +1), share 0.42. MEK = -1 explains 20 of 60 at
+  L = 3 (no direction control was run for it). WT and KO strata gave identical counts (the units had the same TF signs).
+* Likely reasons (not tested): the strongest TF changes after 36 h of BRAF inhibition are cell-cycle regulators (POU2F2, KDM5A, E2F1,
+  FOXM1, ...), which lie more than three edges below BRAF, unlike the immediate MAPK-output TFs that dominated the MEK-inhibitor
+  organoids; only 2 replicates per group; selection by |t| of 4 units.
+
+**Conclusion after both datasets.** The short-path discrimination seen in the MEK-inhibitor organoids (GSE329052) was not reproduced
+in this dataset under a pre-registered test. With one positive and one negative dataset, the claim that `max_path_length` makes
+explanations discriminate is withdrawn as established; it remains an unreplicated, exploratory observation. What stands:
+unrestricted signed paths are saturated on SIGNOR (99.9% ambiguous pairs), so sign consistency alone does not identify a mechanism.

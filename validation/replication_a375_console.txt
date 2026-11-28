@@ -1,0 +1,25 @@
+sanity gate, mean paired log2 change under vemurafenib: {'DUSP6': -4.98, 'SPRY4': -7.18, 'ETV4': -7.18, 'ETV5': -5.7, 'DUSP4': -0.37}
+
+== variant lfc: top-15 TFs ['POU2F2', 'KDM5A', 'E2F1', 'TP73', 'FOXM1', 'CTCF', 'STAT2', 'KDM5B', 'KLF1', 'KLF2']...; BRAF reach 12; matched pool 814
+{'variant': 'lfc', 'L': 3, 'scope': 'pooled (4 units)', 'observed_total': 60, 'BRAF-1': 8, 'BRAF+1': 8, 'MEK-1': 20, 'null_median': 0.0, 'null_max': 32, 'p_ge_BRAF-1': 0.2255, 'p_ge_BRAF+1': 0.2255, 'rank_BRAF-1_among_single_nodes': 137}
+{'variant': 'lfc', 'L': 3, 'scope': 'WT', 'observed_total': 30, 'BRAF-1': 4, 'BRAF+1': 4, 'MEK-1': 10, 'null_median': 0.0, 'null_max': 16, 'p_ge_BRAF-1': 0.2255, 'p_ge_BRAF+1': 0.2255, 'rank_BRAF-1_among_single_nodes': 137}
+{'variant': 'lfc', 'L': 3, 'scope': 'KO', 'observed_total': 30, 'BRAF-1': 4, 'BRAF+1': 4, 'MEK-1': 10, 'null_median': 0.0, 'null_max': 16, 'p_ge_BRAF-1': 0.2255, 'p_ge_BRAF+1': 0.2255, 'rank_BRAF-1_among_single_nodes': 137}
+{'variant': 'lfc', 'L': 2, 'scope': 'pooled (4 units)', 'observed_total': 60, 'BRAF-1': 0, 'BRAF+1': 0, 'MEK-1': 4, 'null_median': 0.0, 'null_max': 24, 'p_ge_BRAF-1': 1.0, 'p_ge_BRAF+1': 1.0, 'rank_BRAF-1_among_single_nodes': 188}
+{'variant': 'lfc', 'L': 2, 'scope': 'WT', 'observed_total': 30, 'BRAF-1': 0, 'BRAF+1': 0, 'MEK-1': 2, 'null_median': 0.0, 'null_max': 12, 'p_ge_BRAF-1': 1.0, 'p_ge_BRAF+1': 1.0, 'rank_BRAF-1_among_single_nodes': 188}
+{'variant': 'lfc', 'L': 2, 'scope': 'KO', 'observed_total': 30, 'BRAF-1': 0, 'BRAF+1': 0, 'MEK-1': 2, 'null_median': 0.0, 'null_max': 12, 'p_ge_BRAF-1': 1.0, 'p_ge_BRAF+1': 1.0, 'rank_BRAF-1_among_single_nodes': 188}
+{'variant': 'lfc', 'L': 4, 'scope': 'pooled (4 units)', 'observed_total': 60, 'BRAF-1': 32, 'BRAF+1': 32, 'MEK-1': 36, 'null_median': 4.0, 'null_max': 44, 'p_ge_BRAF-1': 0.064, 'p_ge_BRAF+1': 0.064, 'rank_BRAF-1_among_single_nodes': 22}
+{'variant': 'lfc', 'L': 4, 'scope': 'WT', 'observed_total': 30, 'BRAF-1': 16, 'BRAF+1': 16, 'MEK-1': 18, 'null_median': 2.0, 'null_max': 22, 'p_ge_BRAF-1': 0.064, 'p_ge_BRAF+1': 0.064, 'rank_BRAF-1_among_single_nodes': 22}
+{'variant': 'lfc', 'L': 4, 'scope': 'KO', 'observed_total': 30, 'BRAF-1': 16, 'BRAF+1': 16, 'MEK-1': 18, 'null_median': 2.0, 'null_max': 22, 'p_ge_BRAF-1': 0.064, 'p_ge_BRAF+1': 0.064, 'rank_BRAF-1_among_single_nodes': 22}
+
+== variant z: top-15 TFs ['ING4', 'GLI2', 'PAX6', 'POU3F1', 'KLF1', 'MSX2', 'NR3C2', 'STAT3', 'ID1', 'E2F1']...; BRAF reach 14; matched pool 814
+{'variant': 'z', 'L': 3, 'scope': 'pooled (4 units)', 'observed_total': 60, 'BRAF-1': 4, 'BRAF+1': 4, 'MEK-1': 20, 'null_median': 0.0, 'null_max': 32, 'p_ge_BRAF-1': 0.4215, 'p_ge_BRAF+1': 0.4215, 'rank_BRAF-1_among_single_nodes': 180}
+{'variant': 'z', 'L': 3, 'scope': 'WT', 'observed_total': 30, 'BRAF-1': 2, 'BRAF+1': 2, 'MEK-1': 10, 'null_median': 0.0, 'null_max': 16, 'p_ge_BRAF-1': 0.4215, 'p_ge_BRAF+1': 0.4215, 'rank_BRAF-1_among_single_nodes': 180}
+{'variant': 'z', 'L': 3, 'scope': 'KO', 'observed_total': 30, 'BRAF-1': 2, 'BRAF+1': 2, 'MEK-1': 10, 'null_median': 0.0, 'null_max': 16, 'p_ge_BRAF-1': 0.4215, 'p_ge_BRAF+1': 0.4215, 'rank_BRAF-1_among_single_nodes': 180}
+{'variant': 'z', 'L': 2, 'scope': 'pooled (4 units)', 'observed_total': 60, 'BRAF-1': 0, 'BRAF+1': 0, 'MEK-1': 4, 'null_median': 0.0, 'null_max': 20, 'p_ge_BRAF-1': 1.0, 'p_ge_BRAF+1': 1.0, 'rank_BRAF-1_among_single_nodes': 203}
+{'variant': 'z', 'L': 2, 'scope': 'WT', 'observed_total': 30, 'BRAF-1': 0, 'BRAF+1': 0, 'MEK-1': 2, 'null_median': 0.0, 'null_max': 10, 'p_ge_BRAF-1': 1.0, 'p_ge_BRAF+1': 1.0, 'rank_BRAF-1_among_single_nodes': 203}
+{'variant': 'z', 'L': 2, 'scope': 'KO', 'observed_total': 30, 'BRAF-1': 0, 'BRAF+1': 0, 'MEK-1': 2, 'null_median': 0.0, 'null_max': 10, 'p_ge_BRAF-1': 1.0, 'p_ge_BRAF+1': 1.0, 'rank_BRAF-1_among_single_nodes': 203}
+{'variant': 'z', 'L': 4, 'scope': 'pooled (4 units)', 'observed_total': 60, 'BRAF-1': 24, 'BRAF+1': 20, 'MEK-1': 36, 'null_median': 4.0, 'null_max': 44, 'p_ge_BRAF-1': 0.1295, 'p_ge_BRAF+1': 0.165, 'rank_BRAF-1_among_single_nodes': 89}
+{'variant': 'z', 'L': 4, 'scope': 'WT', 'observed_total': 30, 'BRAF-1': 12, 'BRAF+1': 10, 'MEK-1': 18, 'null_median': 2.0, 'null_max': 22, 'p_ge_BRAF-1': 0.1295, 'p_ge_BRAF+1': 0.165, 'rank_BRAF-1_among_single_nodes': 89}
+{'variant': 'z', 'L': 4, 'scope': 'KO', 'observed_total': 30, 'BRAF-1': 12, 'BRAF+1': 10, 'MEK-1': 18, 'null_median': 2.0, 'null_max': 22, 'p_ge_BRAF-1': 0.1295, 'p_ge_BRAF+1': 0.165, 'rank_BRAF-1_among_single_nodes': 89}
+
+PRIMARY (protocol 6): p(BRAF-1) = 0.2255 p(BRAF+1) = 0.2255 -> criterion NOT met

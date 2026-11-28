@@ -80,3 +80,8 @@ Findings (docs/validation.md follow-up): unrestricted signed paths on SIGNOR/Omn
 any reachable TF with either sign), so the parameter-free design is almost uninformative there; with paths of 2-3 edges the known MEK action
 beats reach-matched random targets on the MEK-inhibitor organoid data (exploratory, one dataset). Not done: a second dataset, a kinase-level
 PKN restriction beyond the mechanism filters in parity_ambiguity.py, multiplicity-controlled choice of L, per-patient joint SAT at short L.
+
+## 2026-11-28 - pre-registered replication (A375, vemurafenib): not replicated
+Protocol committed first (7b5994c), then run unchanged. Primary criterion not met (BRAF -1 and +1 both explain 8/60; random-node share 22.6%).
+The max_path_length benefit is withdrawn as established. Open: other datasets with immediate-early TF readouts (short time points),
+more replicates, a TF-activity method that targets the immediate MAPK TFs, kinase-substrate based (phospho) readouts instead of TF scores.

@@ -72,7 +72,7 @@ observations), UNREACHABLE, NO_OBSERVATIONS, INCOMPLETE.
 - **Validation:** Compared small graphs with brute-force enumeration and benchmarked public signed networks with simulated TF states.
 - **Results:** Satisfiability checks ran on SIGNOR and OmniPath at the tested scales.
 - **Limitations:** Exhaustive classifications and some queries timed out. These experiments do not validate biological predictions.
-- **Real perturbation data:** On one MEK-inhibitor dataset, unrestricted paths explain everything (99.9% of reachable pairs are reachable with both signs on SIGNOR), so real and sign-shuffled TF states behave identically. With `max_path_length=2` or `3` the known MEK action explains more TF changes than reach-matched random targets (exploratory, one dataset) ([docs/validation.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/validation.md)).
+- **Real perturbation data:** On one MEK-inhibitor dataset, unrestricted paths explain everything (99.9% of reachable pairs are reachable with both signs on SIGNOR), so real and sign-shuffled TF states behave identically. `max_path_length=2` or `3` restored discrimination on one MEK-inhibitor dataset, but a pre-registered replication on BRAF-inhibitor-treated melanoma cells failed (no directional specificity), so that effect is not established ([docs/validation.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/validation.md)).
 - **Reproduction:** [docs/benchmarks.md](https://github.com/DaikiKumakura/signsat/blob/main/docs/benchmarks.md).
 
 ## Citation

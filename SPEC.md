@@ -119,6 +119,8 @@ author.
 * **Discrimination.** With random TF signs on SIGNOR 56 of 60 samples (k = 4, 8, 16) were jointly satisfiable, so
   "all TFs consistent" is a weak test at this PKN density; the structural root set (1,225 nodes in SIGNOR, 1,914 in
   OmniPath) is a very permissive definition of an upstream origin.
+* Replication status: the short-path effect seen on GSE329052 was NOT reproduced on GSE325686 (pre-registered, `docs/replication_protocol.md`);
+  treat `max_path_length` as an option whose benefit is unproven.
 * Options added after the real-data work: `infer(root_states={gene: +-1})` imposes states on intervened nodes, `infer(max_path_length=L)`
   limits explanation paths to L edges (default off). Without a limit, 99.9% of reachable (source, node) pairs on SIGNOR are reachable
   with both signs, so path signs hardly discriminate (`docs/validation.md`, `benchmarks/parity_ambiguity.py`).
